@@ -69,9 +69,9 @@ domain/DNS registrar actions, pasting secret values, SSH private-key custody, VP
 Status: ☐ not started · ◐ in progress · ☑ done
 
 ```
-CP1 Local foundation ............... ◐
+CP1 Local foundation ............... ☑
   1.1 WSL2 + Ubuntu ................ ☑ (human)
-  1.2 .wslconfig memory cap ........ ◐ (drafted; human to apply + verify)
+  1.2 .wslconfig memory cap ........ ☑ (applied + verified: 24GB/18 cores/8GB swap; host has 20 logical processors, 2 left for Windows)
   1.3 Docker Desktop (WSL2) ........ ☑ (human)
   1.4 Toolchain verify script ...... ☑
   1.5 GitHub repo + move into WSL2 . ☑ (human)
@@ -97,3 +97,6 @@ CP8 Hardening & ops (opt) .......... ☐
   root `Makefile` (1.8), confirmed CLAUDE.md/README placement and refreshed README's stale
   "staging area" framing (1.9). Drafted `.wslconfig` (1.2) for human to apply — pending
   verification via `free -h`. Committed, pushed to `origin main`, tagged `cp1`.
+- 2026-06-28 — Verified 1.2 (`.wslconfig`): `free -h` shows ~23Gi mem / 8Gi swap (matches 24GB/8GB
+  cap); `nproc`=18 matches `processors=18`; user confirmed via Windows PowerShell that the host has
+  20 logical processors total, so 2 are correctly left for Windows. CP1 is now fully ☑ complete.
