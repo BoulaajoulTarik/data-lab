@@ -80,7 +80,16 @@ CP1 Local foundation ............... ☑
   1.8 Root Makefile (stubs) ........ ☑
   1.9 Place CLAUDE.md + README ..... ☑
   1.10 First commit (+tag cp1) ..... ☑
-CP2 Local routing proof ............ ☐
+CP2 Local routing proof ............ ◐
+  2.1 `web` network + conventions doc ☑
+  2.2 Infrastructure compose scaffold ☐
+  2.3 Traefik v3 (local, no ACME) ... ☐
+  2.4 Portainer CE .................. ☐
+  2.5 `whoami` skeleton service ..... ☐
+  2.6 `make infra-up`/`infra-down` .. ☐
+  2.7 Verify routing locally ........ ☐
+  2.8 Portainer admin password ...... ☐ (human)
+  2.9 Commit + tag cp2 .............. ☐
 CP3 LIVE on VPS (v0.1) ............. ☐
 CP4 Real project + CI/CD (v0.2) .... ☐
 CP5 Monitoring (optional) .......... ☐
