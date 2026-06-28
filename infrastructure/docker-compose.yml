@@ -9,9 +9,6 @@ volumes:
   # prometheus_data:   # placeholder — wired in CP5
   # loki_data:         # placeholder — wired in CP5 (Loki Docker logging driver, not Promtail)
 
-# --- Skeleton / proof-of-routing -----------------------------------------------
-# whoami: added in 2.5
-
 # --- Monitoring (optional, CP5) ------------------------------------------------
 # grafana, prometheus, loki: added in CP5
 
@@ -60,3 +57,15 @@ services:
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
     # NOTE: no admin password is set here — Portainer prompts for one on first
     # login (task 2.8). Set a strong password immediately; don't leave it open.
+
+  # --- Skeleton / proof-of-routing -----------------------------------------------
+  whoami:
+    image: traefik/whoami:v1.11.0
+    restart: unless-stopped
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      # TODO CP3: switch entrypoint to websecure once ACME/HTTP-01 is wired up.
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
