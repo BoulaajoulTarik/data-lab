@@ -7,12 +7,11 @@ api:
 entryPoints:
   web:
     address: ":80"
-    # Enable in CP3 (VPS) once ACME/HTTP-01 is wired up below:
-    # http:
-    #   redirections:
-    #     entryPoint:
-    #       to: websecure
-    #       scheme: https
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
   websecure:
     address: ":443"
 
@@ -21,11 +20,10 @@ providers:
     exposedByDefault: false
     network: web
 
-# Enable in CP3 (VPS): Let's Encrypt via HTTP-01 on the `web` entrypoint.
-# certificatesResolvers:
-#   le:
-#     acme:
-#       email: you@example.com
-#       storage: /letsencrypt/acme.json
-#       httpChallenge:
-#         entryPoint: web
+certificatesResolvers:
+  le:
+    acme:
+      email: boulaajoul.tarik@gmail.com
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web

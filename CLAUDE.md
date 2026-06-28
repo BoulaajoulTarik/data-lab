@@ -96,7 +96,23 @@ CP2 Local routing proof ............ ☑
   2.7 Verify routing locally ........ ☑ (whoami/portainer 200, traefik.localhost 401→200 w/ auth, unmatched host 404; *.localhost needs no /etc/hosts edit in modern browsers)
   2.8 Portainer admin password ...... ☑ (human — done)
   2.9 Commit + tag cp2 .............. ☑
-CP3 LIVE on VPS (v0.1) ............. ☐
+CP3 LIVE on VPS (v0.1) ............. ☑ (VPS 167.233.138.193, https://whoami.tarik-lab.dev live)
+  3.1 Provision the VPS ............ ☑ (human — Hetzner regular-performance tier, Ubuntu 24.04.4 LTS)
+  3.2 Harden the VPS ............... ☑ (drafted scripts/harden-vps.sh; human ran it — sudo user
+      `deploy`, ufw 22/80/443 only, root login + password auth disabled, unattended-upgrades on;
+      deploy given NOPASSWD sudo via /etc/sudoers.d/deploy-nopasswd to unblock Operator automation)
+  3.3 Install Docker + Compose ..... ☑ (Docker 29.6.1, Compose plugin v5.2.0, via official apt repo)
+  3.4 Infra repo onto VPS + `web` .. ☑ (repo is private — synced infrastructure/ via rsync instead of
+      git clone; `web` bridge network created; human set TRAEFIK_DASHBOARD_AUTH in VPS .env directly)
+  3.5 Traefik HTTP-01 + HTTPS ...... ☑ (certresolver `le`, web→websecure redirect on, acme.json in a
+      named volume; routers switched to tarik-lab.dev hostnames over websecure)
+  3.6 Wildcard DNS A record ........ ☑ (human — `*` and `@` → 167.233.138.193, confirmed resolving)
+  3.7 Launch + verify HTTPS ........ ☑ (stack up; Let's Encrypt cert issued for whoami.tarik-lab.dev
+      on first try; HTTP→HTTPS redirect confirmed)
+  3.8 Security review .............. ☑ (only 22/80/443 reachable; dashboard/Portainer gated;
+      acme.json 600 root:root; docker.sock mounts read-only; fixed infrastructure/.env perms
+      664→600 on the VPS — was world-readable)
+  3.9 Commit + tag cp3/v0.1 ........ ☑
 CP4 Real project + CI/CD (v0.2) .... ☐
 CP5 Monitoring (optional) .......... ☐
 CP6 MinIO + data project (opt) ..... ☐
@@ -131,3 +147,27 @@ CP8 Hardening & ops (opt) .......... ☐
   `/etc/hosts` edit needed. Human set the Portainer admin password (2.8). Security review: no real
   secrets tracked, `.env` stays gitignored, both `docker.sock` mounts are read-only, only Traefik
   publishes host ports. CP2 fully ☑ complete, tagged `cp2`.
+- 2026-06-28 — CP3 human-prep underway (3.1): Hetzner's cost-optimised tier (x86 older-gen / Arm64
+  Ampere) is out of stock during an outage, in every location — only "regular performance" (x86 AMD,
+  newer gen, shared vCPU) is available, at ~€20/mo instead of the ~€3.79/mo the spec assumed. User
+  decided to proceed now at €20/mo rather than wait or change provider, with the intent to resize down
+  to the cheap tier once Hetzner's stock recovers (resize = brief downtime, no data loss). Locked
+  Decisions unchanged (still Hetzner Cloud); this is a temporary stock issue, not a provider change.
+- 2026-06-29 — CP3 completed end to end. Generated a dedicated `data-lab-deploy` SSH key (no
+  passphrase, by user choice) and attached it at VPS creation (3.1) — VPS public IP
+  167.233.138.193, Ubuntu 24.04.4 LTS. Drafted `scripts/harden-vps.sh` for 3.2; human ran it. Hit a
+  real lockout risk: the script's sudo user had no password, so once root SSH login was disabled
+  there was briefly no way to gain root non-interactively — recovered via the still-open root
+  session (`passwd deploy`), then by user choice switched `deploy` to NOPASSWD sudo via
+  `/etc/sudoers.d/deploy-nopasswd` so the remaining Operator tasks could run unattended over SSH.
+  Installed Docker 29.6.1 + Compose v5.2.0 from the official apt repo (3.3). Repo is private, so
+  3.4 synced just `infrastructure/` via `rsync` instead of `git clone`; created the `web` network;
+  human set `TRAEFIK_DASHBOARD_AUTH` directly in the VPS `.env` (hit a stale `nano` swap file from
+  a dropped session on the first attempt, redone cleanly). Enabled Traefik's `le` certresolver,
+  HTTP-01 on `web`, web→websecure redirect, and switched all routers to their `tarik-lab.dev`
+  hostnames (3.5); human added the wildcard + apex `A` records, confirmed resolving (3.6). Launched
+  the stack — Let's Encrypt issued a valid cert for `whoami.tarik-lab.dev` on the first attempt,
+  verified HTTP→HTTPS redirect and cert issuer (3.7). Security review (3.8) found one real issue:
+  `infrastructure/.env` was `664` (world-readable) on the VPS — tightened to `600`; everything else
+  (ports, auth gating, `acme.json` perms, read-only docker.sock mounts) checked out clean.
+  CP3 fully ☑ complete, tagged `cp3` and `v0.1`.

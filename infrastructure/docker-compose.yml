@@ -4,6 +4,7 @@ networks:
 
 volumes:
   portainer_data:
+  letsencrypt:
   # minio_data:        # placeholder — wired in CP6
   # grafana_data:      # placeholder — wired in CP5
   # prometheus_data:   # placeholder — wired in CP5
@@ -27,14 +28,16 @@ services:
       - "443:443"
     volumes:
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - letsencrypt:/letsencrypt
       # Mounted read-only for now; a socket proxy is added in CP8.
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - web
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.localhost`)"
-      - "traefik.http.routers.traefik-dashboard.entrypoints=web"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.tarik-lab.dev`)"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
+      - "traefik.http.routers.traefik-dashboard.tls.certresolver=le"
       - "traefik.http.routers.traefik-dashboard.service=api@internal"
       - "traefik.http.routers.traefik-dashboard.middlewares=traefik-auth"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_AUTH}"
@@ -51,9 +54,9 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-      # TODO CP3: switch entrypoint to websecure once ACME/HTTP-01 is wired up.
-      - "traefik.http.routers.portainer.rule=Host(`portainer.localhost`)"
-      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.tarik-lab.dev`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.tls.certresolver=le"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
     # NOTE: no admin password is set here — Portainer prompts for one on first
     # login (task 2.8). Set a strong password immediately; don't leave it open.
@@ -66,6 +69,6 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-      # TODO CP3: switch entrypoint to websecure once ACME/HTTP-01 is wired up.
-      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.tarik-lab.dev`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "traefik.http.routers.whoami.tls.certresolver=le"
