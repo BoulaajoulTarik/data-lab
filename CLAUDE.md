@@ -82,7 +82,7 @@ CP1 Local foundation ............... ☑
   1.10 First commit (+tag cp1) ..... ☑
 CP2 Local routing proof ............ ◐
   2.1 `web` network + conventions doc ☑
-  2.2 Infrastructure compose scaffold ☐
+  2.2 Infrastructure compose scaffold ☑
   2.3 Traefik v3 (local, no ACME) ... ☐
   2.4 Portainer CE .................. ☐
   2.5 `whoami` skeleton service ..... ☐

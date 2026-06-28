@@ -1,0 +1,27 @@
+networks:
+  web:
+    external: true
+
+volumes:
+  portainer_data:
+  # minio_data:        # placeholder — wired in CP6
+  # grafana_data:      # placeholder — wired in CP5
+  # prometheus_data:   # placeholder — wired in CP5
+  # loki_data:         # placeholder — wired in CP5 (Loki Docker logging driver, not Promtail)
+
+# --- Routing -----------------------------------------------------------------
+# traefik: added in 2.3
+
+# --- Admin / visibility -------------------------------------------------------
+# portainer: added in 2.4
+
+# --- Skeleton / proof-of-routing -----------------------------------------------
+# whoami: added in 2.5
+
+# --- Monitoring (optional, CP5) ------------------------------------------------
+# grafana, prometheus, loki: added in CP5
+
+# --- Storage (optional, CP6) ---------------------------------------------------
+# minio: added in CP6
+
+services: {}
