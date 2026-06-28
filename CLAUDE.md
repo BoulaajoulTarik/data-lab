@@ -86,7 +86,7 @@ CP1 Local foundation ............... ☑
   1.8 Root Makefile (stubs) ........ ☑
   1.9 Place CLAUDE.md + README ..... ☑
   1.10 First commit (+tag cp1) ..... ☑
-CP2 Local routing proof ............ ◐
+CP2 Local routing proof ............ ☑
   2.1 `web` network + conventions doc ☑
   2.2 Infrastructure compose scaffold ☑
   2.3 Traefik v3 (local, no ACME) ... ☑ (pinned v3.7.5 after v3.1/v3.5 broke vs this Docker Engine)
@@ -94,8 +94,8 @@ CP2 Local routing proof ............ ◐
   2.5 `whoami` skeleton service ..... ☑ (pinned v1.11.0, routes via Traefik at whoami.localhost)
   2.6 `make infra-up`/`infra-down` .. ☑ (already wired in CP1; confirmed it picks up infrastructure/.env automatically)
   2.7 Verify routing locally ........ ☑ (whoami/portainer 200, traefik.localhost 401→200 w/ auth, unmatched host 404; *.localhost needs no /etc/hosts edit in modern browsers)
-  2.8 Portainer admin password ...... ☐ (human)
-  2.9 Commit + tag cp2 .............. ☐
+  2.8 Portainer admin password ...... ☑ (human — done)
+  2.9 Commit + tag cp2 .............. ☑
 CP3 LIVE on VPS (v0.1) ............. ☐
 CP4 Real project + CI/CD (v0.2) .... ☐
 CP5 Monitoring (optional) .......... ☐
@@ -123,3 +123,11 @@ CP8 Hardening & ops (opt) .......... ☐
   endpoint. `traefik:v3.7.5` negotiates correctly; pinned that instead. User decided the project-wide
   fix is to always pin every image to its current latest stable tag (added to Conventions), not just
   for Docker-socket clients. Traefik dashboard now resolves at `traefik.localhost` behind basic auth.
+- 2026-06-28 — CP2 closed out: added Portainer CE (2.4, pinned 2.39.4) and the `traefik/whoami`
+  skeleton (2.5, pinned v1.11.0), both routed through Traefik on `web`. Confirmed `make infra-up`/
+  `infra-down` already pick up `infrastructure/.env` automatically (2.6). Verified routing locally —
+  whoami/portainer return 200, `traefik.localhost` is gated by basic auth (401→200 with creds), an
+  unmatched host falls through to 404 (2.7); modern browsers resolve `*.localhost` natively, no
+  `/etc/hosts` edit needed. Human set the Portainer admin password (2.8). Security review: no real
+  secrets tracked, `.env` stays gitignored, both `docker.sock` mounts are read-only, only Traefik
+  publishes host ports. CP2 fully ☑ complete, tagged `cp2`.
