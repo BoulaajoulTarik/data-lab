@@ -33,6 +33,12 @@ optional capabilities. Favor finishing over scope.
 - `.env.example` lists variable **names** only (empty values + comments). Real values live in local `.env` (Zone 1) or GitHub Actions secrets (Zone 2).
 - Every Makefile recipe uses tabs. `name=X` targets guard against a missing/empty name.
 - Docs live under `infrastructure/docs/` (markdown). Diagrams are Mermaid, committed as code.
+- Pin every container image to its current latest stable release tag (never the floating `latest`
+  tag) — check what's actually current when adding/touching a service, don't default to whatever
+  version a tutorial/checkpoint doc happens to mention. Reason: `traefik:v3.1`/`v3.5` failed against
+  this lab's Docker Engine (API `MinAPIVersion=1.40`) with a cryptic 400 because their vendored
+  Docker client hardcoded a bootstrap call to the old `/v1.24/version` endpoint; `v3.7.5` fixed it.
+  Stale pins can silently break against a host's current Docker Engine.
 
 ## Roles (the hats — one agent, switched posture per task)
 
@@ -83,7 +89,7 @@ CP1 Local foundation ............... ☑
 CP2 Local routing proof ............ ◐
   2.1 `web` network + conventions doc ☑
   2.2 Infrastructure compose scaffold ☑
-  2.3 Traefik v3 (local, no ACME) ... ☐
+  2.3 Traefik v3 (local, no ACME) ... ☑ (pinned v3.7.5 after v3.1/v3.5 broke vs this Docker Engine)
   2.4 Portainer CE .................. ☐
   2.5 `whoami` skeleton service ..... ☐
   2.6 `make infra-up`/`infra-down` .. ☐
@@ -109,3 +115,11 @@ CP8 Hardening & ops (opt) .......... ☐
 - 2026-06-28 — Verified 1.2 (`.wslconfig`): `free -h` shows ~23Gi mem / 8Gi swap (matches 24GB/8GB
   cap); `nproc`=18 matches `processors=18`; user confirmed via Windows PowerShell that the host has
   20 logical processors total, so 2 are correctly left for Windows. CP1 is now fully ☑ complete.
+- 2026-06-28 — CP2 underway: created the `web` network + conventions doc (2.1), scaffolded
+  infrastructure/docker-compose.yml (2.2). Task 2.3 (Traefik) hit a real bug: `traefik:v3.1`/`v3.5`
+  failed against this Docker Engine (Docker Desktop 4.79, API `MinAPIVersion=1.40`) with a cryptic
+  empty 400 — diagnosed by proxying the docker.sock through a `socat -v` debug container, which
+  showed Traefik's vendored Docker client hardcoding a bootstrap call to the old `/v1.24/version`
+  endpoint. `traefik:v3.7.5` negotiates correctly; pinned that instead. User decided the project-wide
+  fix is to always pin every image to its current latest stable tag (added to Conventions), not just
+  for Docker-socket clients. Traefik dashboard now resolves at `traefik.localhost` behind basic auth.

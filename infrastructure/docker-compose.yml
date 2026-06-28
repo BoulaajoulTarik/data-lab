@@ -9,9 +9,6 @@ volumes:
   # prometheus_data:   # placeholder — wired in CP5
   # loki_data:         # placeholder — wired in CP5 (Loki Docker logging driver, not Promtail)
 
-# --- Routing -----------------------------------------------------------------
-# traefik: added in 2.3
-
 # --- Admin / visibility -------------------------------------------------------
 # portainer: added in 2.4
 
@@ -24,4 +21,26 @@ volumes:
 # --- Storage (optional, CP6) ---------------------------------------------------
 # minio: added in CP6
 
-services: {}
+services:
+  # --- Routing -----------------------------------------------------------------
+  traefik:
+    image: traefik:v3.7.5
+    restart: unless-stopped
+    command:
+      - "--configFile=/etc/traefik/traefik.yml"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      # Mounted read-only for now; a socket proxy is added in CP8.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=web"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.middlewares=traefik-auth"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_AUTH}"
