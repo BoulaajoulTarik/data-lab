@@ -92,8 +92,8 @@ CP2 Local routing proof ............ ◐
   2.3 Traefik v3 (local, no ACME) ... ☑ (pinned v3.7.5 after v3.1/v3.5 broke vs this Docker Engine)
   2.4 Portainer CE .................. ☑ (pinned 2.39.4, routes via Traefik at portainer.localhost)
   2.5 `whoami` skeleton service ..... ☑ (pinned v1.11.0, routes via Traefik at whoami.localhost)
-  2.6 `make infra-up`/`infra-down` .. ☐
-  2.7 Verify routing locally ........ ☐
+  2.6 `make infra-up`/`infra-down` .. ☑ (already wired in CP1; confirmed it picks up infrastructure/.env automatically)
+  2.7 Verify routing locally ........ ☑ (whoami/portainer 200, traefik.localhost 401→200 w/ auth, unmatched host 404; *.localhost needs no /etc/hosts edit in modern browsers)
   2.8 Portainer admin password ...... ☐ (human)
   2.9 Commit + tag cp2 .............. ☐
 CP3 LIVE on VPS (v0.1) ............. ☐
