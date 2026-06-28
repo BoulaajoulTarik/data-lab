@@ -9,9 +9,6 @@ volumes:
   # prometheus_data:   # placeholder — wired in CP5
   # loki_data:         # placeholder — wired in CP5 (Loki Docker logging driver, not Promtail)
 
-# --- Admin / visibility -------------------------------------------------------
-# portainer: added in 2.4
-
 # --- Skeleton / proof-of-routing -----------------------------------------------
 # whoami: added in 2.5
 
@@ -44,3 +41,22 @@ services:
       - "traefik.http.routers.traefik-dashboard.service=api@internal"
       - "traefik.http.routers.traefik-dashboard.middlewares=traefik-auth"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_AUTH}"
+
+  # --- Admin / visibility -------------------------------------------------------
+  portainer:
+    image: portainer/portainer-ce:2.39.4
+    restart: unless-stopped
+    volumes:
+      - portainer_data:/data
+      # Mounted read-only for now; a socket proxy is added in CP8.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      # TODO CP3: switch entrypoint to websecure once ACME/HTTP-01 is wired up.
+      - "traefik.http.routers.portainer.rule=Host(`portainer.localhost`)"
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    # NOTE: no admin password is set here — Portainer prompts for one on first
+    # login (task 2.8). Set a strong password immediately; don't leave it open.

@@ -90,7 +90,7 @@ CP2 Local routing proof ............ ◐
   2.1 `web` network + conventions doc ☑
   2.2 Infrastructure compose scaffold ☑
   2.3 Traefik v3 (local, no ACME) ... ☑ (pinned v3.7.5 after v3.1/v3.5 broke vs this Docker Engine)
-  2.4 Portainer CE .................. ☐
+  2.4 Portainer CE .................. ☑ (pinned 2.39.4, routes via Traefik at portainer.localhost)
   2.5 `whoami` skeleton service ..... ☐
   2.6 `make infra-up`/`infra-down` .. ☐
   2.7 Verify routing locally ........ ☐
