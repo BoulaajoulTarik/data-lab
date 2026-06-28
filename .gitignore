@@ -1,0 +1,17 @@
+# Secrets never enter git. .env.* is ignored, but the negation keeps
+# .env.example tracked so the variable names stay documented in the repo.
+.env
+.env.*
+!.env.example
+
+secrets/
+
+__pycache__/
+*.pyc
+
+.DS_Store
+
+backups/
+
+# Machine-local Claude Code permission state, not shared config.
+.claude/settings.local.json
