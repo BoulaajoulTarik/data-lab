@@ -37,6 +37,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Lint (ruff)
+        run: |
+          pip install --quiet ruff
+          ruff check projects/demo/app
+
+      - name: Validate compose files
+        run: |
+          (cd infrastructure && TRAEFIK_DASHBOARD_AUTH=placeholder docker compose config --quiet)
+          cp projects/demo/.env.example projects/demo/.env
+          (cd projects/demo && docker compose config --quiet)
+          (cd projects/demo && DEMO_IMAGE=placeholder docker compose -f docker-compose.prod.yml config --quiet)
+          rm projects/demo/.env
+
       - name: Build and push
         uses: docker/build-push-action@v7.2.0
         with:
