@@ -10,7 +10,7 @@ you a more substantive portfolio piece.
 
 ---
 
-## Human prep
+## My prep
 - [ ] Generate strong **MinIO root credentials** and place them in `.env` (`MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD`).
 
 ---
@@ -27,7 +27,7 @@ console at console.tarik-lab.dev (websecure+le). Validate config; remind me to s
 ```
 **Acceptance:** MinIO console loads; S3 endpoint reachable. **Effort:** 🟡
 
-### 6.2 — Create a bucket + scoped access  [Builder + Human]  [1×]
+### 6.2 — Create a bucket + scoped access  [Builder + Me]  [1×]
 **What/Why:** Don't use root creds in app code. **How:** agent scripts bucket + a scoped access key
 via the MinIO client; you confirm/store the key in the project `.env`.
 **Agent prompt:**

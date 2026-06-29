@@ -9,7 +9,7 @@ posture, and resource limits so no project can starve the platform.
 
 ---
 
-## Human prep
+## My prep
 - [ ] None required. Optionally decide where backup archives should live (default: on the VPS under a gitignored `backups/`; consider copying off-box manually for real safety).
 
 ---

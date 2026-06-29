@@ -1,7 +1,7 @@
 # Apex Web App — Deploy Portfolio at `tarik-lab.dev`  [Standalone — outside CP1–CP8]
 
-**Status:** content validated. Ready for an agent (with project context) to execute on explicit
-human go-ahead.
+**Status:** content validated. Ready for an agent (with project context) to execute on my explicit
+go-ahead.
 
 **Goal:** serve the existing static portfolio page as the home page at the bare domain
 `https://tarik-lab.dev`, reusing the proven Traefik + ACME + `web`-network mechanism from CP3
@@ -19,7 +19,7 @@ Traefik/`web`-network mechanism — it does **not** depend on CP4's tooling (`_t
 
 `CLAUDE.md`'s Locked Decisions specify a **flat subdomain scheme** (`service.tarik-lab.dev`) and say
 nothing about the bare domain. This task deliberately serves content at the apex instead —
-confirmed with the human. DNS already supports this with no new records needed: the wildcard
+confirmed with me. DNS already supports this with no new records needed: the wildcard
 `*.tarik-lab.dev` record and the apex `@` record are two separate DNS entries (a wildcard does not
 match a bare domain), and both were already pointed at the VPS IP back in CP3 task 3.6. Routing-wise
 nothing is special: Traefik's docker provider treats `Host(`tarik-lab.dev`)` exactly like any
@@ -40,7 +40,7 @@ Already fixed in this content (this session): CV download points to the PDF (was
 nonexistent file), LinkedIn URL corrected to
 `https://www.linkedin.com/in/tarik-boulaajoul-8b1b6a149/` (was an incomplete placeholder), GitHub
 link added (`https://github.com/BoulaajoulTarik`, was missing). The phone number is intentionally
-public — confirmed with the human, not an oversight.
+public — confirmed with me, not an oversight.
 
 **Known follow-ups not required for this deploy:** the 5-feature interactive roadmap in
 `agent-handoff.md` (SQL Playground, Lineage Explorer, Cost Comparator, Data Quality Test Runner,
@@ -68,12 +68,12 @@ blog post teasers in `#writing` have no real article links yet — left as place
 - **Do not edit existing `infrastructure/` files** (`docker-compose.yml`, `traefik.yml`, etc.) — no
   central wiring is needed; the new service is self-contained and only needs the `web` network,
   which already exists.
-- **Do not commit or tag anything without explicit human approval** — draft the changes and let the
-  human review and run the commit, same posture as other human-prep boundaries in `CLAUDE.md`.
+- **Do not commit or tag anything without my explicit approval** — draft the changes and let me
+  review and run the commit, same posture as other my-prep boundaries in `CLAUDE.md`.
 - **Do not touch or interact with CP4 work at all** — no edits to `projects/_template`,
   `make new-project`, CI/CD workflows, or the CP4 State Tracker rows. If CP4 is in progress
   concurrently, avoid any file it's also touching.
-- **Do the Makefile + Locked Decisions edits last** — only after the human has tested and validated
+- **Do the Makefile + Locked Decisions edits last** — only after I have tested and validated
   the deployed page over HTTPS, not as a first step.
 
 ## Acceptance check

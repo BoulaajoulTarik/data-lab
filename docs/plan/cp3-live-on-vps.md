@@ -15,7 +15,7 @@ Let's Encrypt certificate, and Traefik dashboard + Portainer require auth. → c
 
 ---
 
-## Human prep (security-sensitive — these are yours)
+## My prep (security-sensitive — these are mine)
 
 - [ ] **Create a Hetzner Cloud account**, add billing (you confirmed hourly billing = cents to test).
 - [ ] **Provision a VPS** (smallest shared instance, ~€3.79/mo, German datacenter), Ubuntu LTS, with your `data-lab-deploy` **public** key attached. Note the **public IP** (3.1).
@@ -30,12 +30,12 @@ Let's Encrypt certificate, and Traefik dashboard + Portainer require auth. → c
 
 ## Tasks
 
-### 3.1 — Provision the VPS  [Human]  [1×][PRE]
+### 3.1 — Provision the VPS  [Me]  [1×][PRE]
 **What/Why:** The always-on public host. **How:** Hetzner console → create server → Ubuntu → attach
 your deploy public key → note the IP.
 **Acceptance:** you can `ssh -i ~/.ssh/data-lab-deploy <user>@<VPS_IP>` from WSL2.
 
-### 3.2 — Harden the VPS  [Operator drafts → Human runs]  [1×]
+### 3.2 — Harden the VPS  [Operator drafts → I run]  [1×]
 **What/Why:** A public server is probed constantly; this is the baseline. **How:** agent writes a
 commented script; **you review and run it.**
 **Agent prompt:**
@@ -83,7 +83,7 @@ record just makes the hostnames resolve. Validate config. Don't start until DNS 
 ```
 **Acceptance:** config valid; routers point at `*.tarik-lab.dev` over websecure+le. **Effort:** 🟠
 
-### 3.6 — Add the wildcard DNS A record  [Human]  [1×]
+### 3.6 — Add the wildcard DNS A record  [Me]  [1×]
 **What/Why:** Make every subdomain resolve to the VPS so HTTP-01 can validate and users can connect.
 **How:** at the registrar's DNS editor add: `A  *  <VPS_IP>` and `A  @  <VPS_IP>` (wildcard + apex).
 **Acceptance:** `dig whoami.tarik-lab.dev` (or `nslookup`) returns the VPS IP.

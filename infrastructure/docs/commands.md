@@ -117,4 +117,4 @@ that only happens once the container is running and joined to the `web` network 
 already exists there from the infrastructure stack.
 
 Secrets (e.g. `infrastructure/.env` with `TRAEFIK_DASHBOARD_AUTH`) are set directly on the VPS by
-the human and are never part of the rsync payload from this repo.
+me and are never part of the rsync payload from this repo.

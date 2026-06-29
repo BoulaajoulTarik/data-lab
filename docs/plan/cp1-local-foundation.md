@@ -12,7 +12,7 @@
 
 ---
 
-## Human prep (do these first, in one sitting)
+## My prep (do these first, in one sitting)
 
 - [ ] **Install WSL2 + Ubuntu 24.04** (task 1.1 — the agent can't install its own foundation).
 - [ ] **Install Docker Desktop** with the WSL2 backend, integration enabled for Ubuntu (1.3).
@@ -25,12 +25,12 @@ Everything below this line can then be handed to the agent, task by task.
 
 ## Tasks
 
-### 1.1 — Install WSL2 + Ubuntu 24.04  [Human]  [1×]
+### 1.1 — Install WSL2 + Ubuntu 24.04  [Me]  [1×]
 **What/Why:** The Linux environment Docker and all tooling run on. **How:** elevated PowerShell
 `wsl --install`, reboot, then `wsl --install -d Ubuntu-24.04` and set your Linux user.
 **Acceptance:** `wsl -l -v` shows Ubuntu-24.04 running on version 2.
 
-### 1.2 — Cap WSL2 memory/CPU  [Builder drafts → Human applies]  [1×]
+### 1.2 — Cap WSL2 memory/CPU  [Builder drafts → I apply]  [1×]
 **What/Why:** Keep the always-on stack from starving Windows. **How:** agent writes the file
 contents; you place it and run `wsl --shutdown`.
 **Agent prompt:**
@@ -41,7 +41,7 @@ one-line apply step (wsl --shutdown). Do not try to write to the Windows filesys
 ```
 **Acceptance:** after applying, `free -h` in Ubuntu reflects the cap. **Effort:** 🟢
 
-### 1.3 — Install Docker Desktop (WSL2 backend)  [Human]  [1×]
+### 1.3 — Install Docker Desktop (WSL2 backend)  [Me]  [1×]
 **What/Why:** Provides the Docker engine for the whole lab. **How:** install, enable "Use the WSL 2
 based engine," toggle WSL Integration for Ubuntu-24.04.
 **Acceptance:** `docker run --rm hello-world` succeeds inside Ubuntu.
@@ -56,9 +56,9 @@ Idempotent and re-runnable. Run it and report.
 ```
 **Acceptance:** script prints versions for all four and exits 0. **Effort:** 🟢
 
-### 1.5 — Create GitHub repo & establish `~/data-lab`  [Human + Builder]  [1×]
+### 1.5 — Create GitHub repo & establish `~/data-lab`  [Me + Builder]  [1×]
 **What/Why:** The working root must be in the WSL2 Linux filesystem. Move the staged Desktop files in.
-**How (human):** create the GitHub repo; in Ubuntu, `cd ~ && git clone <url> data-lab` (or `git init`
+**How (me):** create the GitHub repo; in Ubuntu, `cd ~ && git clone <url> data-lab` (or `git init`
 in `~/data-lab` and set the remote). Then copy the staged docs (`CLAUDE.md`, `README.md`, the `cp*`
 files) from the Windows Desktop into `~/data-lab` — e.g. from Ubuntu:
 `cp -r /mnt/c/Users/<you>/Desktop/data-lab/* ~/data-lab/`.

@@ -14,7 +14,7 @@ reports full metrics.
 
 ---
 
-## Human prep
+## My prep
 - [ ] Set a **Grafana admin password** in local `.env` / VPS `.env` (referenced by the agent as `GF_SECURITY_ADMIN_PASSWORD`).
 
 ---

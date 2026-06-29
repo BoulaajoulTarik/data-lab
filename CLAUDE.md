@@ -2,7 +2,7 @@
 
 > This file is the project's memory. **Read it fully at the start of every session.** Update the
 > State Tracker at the end of every task. Keep the Locked Decisions section authoritative — if a
-> request contradicts it, stop and confirm with the human before proceeding.
+> request contradicts it, stop and confirm with me before proceeding.
 
 ## Mission
 
@@ -15,7 +15,7 @@ optional capabilities. Favor finishing over scope.
 - **Domain:** `tarik-lab.dev`
 - **Subdomain scheme:** flat — `service.tarik-lab.dev` (e.g. `traefik.`, `portainer.`, `grafana.`, `demo.`, `<project>.`)
 - **Apex exception:** the bare domain `tarik-lab.dev` (no subdomain) serves the personal portfolio
-  webapp (`projects/webapp/`, standalone task — see `apex-webapp-task.md`), not a flat-scheme
+  webapp (`projects/webapp/`, standalone task — see `docs/plan/apex-webapp-task.md`), not a flat-scheme
   service. Every other hostname still follows the flat subdomain scheme above.
 - **Internet path:** **VPS only** (Hetzner Cloud). Cloudflare Tunnel is NOT used.
 - **TLS:** Let's Encrypt via Traefik **HTTP-01** challenge (port 80). No DNS-01, no Cloudflare token.
@@ -58,21 +58,21 @@ Each task is tagged with the hat to wear:
 - **Commit per task** (small, message describes the task). **Tag per checkpoint.**
 - Before starting a task, confirm its **dependencies** are done in the State Tracker.
 - After each task, run its **acceptance check** and only then mark it done and commit.
-- **Stop at human-prep items.** Never create accounts, enter passwords/payment, handle SSH private keys, or change security settings. Draft scripts for the human to review and run; reference secrets by **name** only.
+- **Stop at my-prep items.** Never create accounts, enter passwords/payment, handle SSH private keys, or change security settings. Draft scripts for me to review and run; reference secrets by **name** only.
 - If something contradicts Locked Decisions, **pause and ask** rather than improvising.
 
-## Human-only boundary
+## My boundary
 
-These are the human's job; the agent advises but never performs them: account creation, payments,
+These are my job; the agent advises but never performs them: account creation, payments,
 domain/DNS registrar actions, pasting secret values, SSH private-key custody, VPS security settings
-(firewall, sshd). Each checkpoint's **Human prep** block lists the ones for that stage.
+(firewall, sshd). Each checkpoint's **My prep** block lists the ones for that stage.
 
 ## Where things are
 
-- Checkpoint specs: `cp1-…` through `cp8-…` (in repo root or `docs/plan/`).
+- Checkpoint specs: `docs/plan/cp1-…` through `docs/plan/cp8-…`.
 - Required path: CP1 → CP2 → CP3 (live, `v0.1`) → CP4 (CI/CD, `v0.2`).
 - Optional: CP5 monitoring, CP6 MinIO, CP7 docs+diagrams, CP8 hardening.
-- Standalone, out-of-scope task: `apex-webapp-task.md` — deploy a personal portfolio page at the
+- Standalone, out-of-scope task: `docs/plan/apex-webapp-task.md` — deploy a personal portfolio page at the
   apex `tarik-lab.dev`. Not part of CP1–CP8, does not touch the State Tracker, separate from CP4.
 
 ## State tracker (living — keep current)
@@ -81,11 +81,11 @@ Status: ☐ not started · ◐ in progress · ☑ done
 
 ```
 CP1 Local foundation ............... ☑
-  1.1 WSL2 + Ubuntu ................ ☑ (human)
+  1.1 WSL2 + Ubuntu ................ ☑ (me)
   1.2 .wslconfig memory cap ........ ☑ (applied + verified: 24GB/18 cores/8GB swap; host has 20 logical processors, 2 left for Windows)
-  1.3 Docker Desktop (WSL2) ........ ☑ (human)
+  1.3 Docker Desktop (WSL2) ........ ☑ (me)
   1.4 Toolchain verify script ...... ☑
-  1.5 GitHub repo + move into WSL2 . ☑ (human)
+  1.5 GitHub repo + move into WSL2 . ☑ (me)
   1.6 Monorepo skeleton ............ ☑
   1.7 .gitignore ................... ☑
   1.8 Root Makefile (stubs) ........ ☑
@@ -99,19 +99,19 @@ CP2 Local routing proof ............ ☑
   2.5 `whoami` skeleton service ..... ☑ (pinned v1.11.0, routes via Traefik at whoami.localhost)
   2.6 `make infra-up`/`infra-down` .. ☑ (already wired in CP1; confirmed it picks up infrastructure/.env automatically)
   2.7 Verify routing locally ........ ☑ (whoami/portainer 200, traefik.localhost 401→200 w/ auth, unmatched host 404; *.localhost needs no /etc/hosts edit in modern browsers)
-  2.8 Portainer admin password ...... ☑ (human — done)
+  2.8 Portainer admin password ...... ☑ (me — done)
   2.9 Commit + tag cp2 .............. ☑
 CP3 LIVE on VPS (v0.1) ............. ☑ (VPS 167.233.138.193, https://whoami.tarik-lab.dev live)
-  3.1 Provision the VPS ............ ☑ (human — Hetzner regular-performance tier, Ubuntu 24.04.4 LTS)
-  3.2 Harden the VPS ............... ☑ (drafted scripts/harden-vps.sh; human ran it — sudo user
+  3.1 Provision the VPS ............ ☑ (me — Hetzner regular-performance tier, Ubuntu 24.04.4 LTS)
+  3.2 Harden the VPS ............... ☑ (drafted scripts/harden-vps.sh; I ran it — sudo user
       `deploy`, ufw 22/80/443 only, root login + password auth disabled, unattended-upgrades on;
       deploy given NOPASSWD sudo via /etc/sudoers.d/deploy-nopasswd to unblock Operator automation)
   3.3 Install Docker + Compose ..... ☑ (Docker 29.6.1, Compose plugin v5.2.0, via official apt repo)
   3.4 Infra repo onto VPS + `web` .. ☑ (repo is private — synced infrastructure/ via rsync instead of
-      git clone; `web` bridge network created; human set TRAEFIK_DASHBOARD_AUTH in VPS .env directly)
+      git clone; `web` bridge network created; I set TRAEFIK_DASHBOARD_AUTH in VPS .env directly)
   3.5 Traefik HTTP-01 + HTTPS ...... ☑ (certresolver `le`, web→websecure redirect on, acme.json in a
       named volume; routers switched to tarik-lab.dev hostnames over websecure)
-  3.6 Wildcard DNS A record ........ ☑ (human — `*` and `@` → 167.233.138.193, confirmed resolving)
+  3.6 Wildcard DNS A record ........ ☑ (me — `*` and `@` → 167.233.138.193, confirmed resolving)
   3.7 Launch + verify HTTPS ........ ☑ (stack up; Let's Encrypt cert issued for whoami.tarik-lab.dev
       on first try; HTTP→HTTPS redirect confirmed)
   3.8 Security review .............. ☑ (only 22/80/443 reachable; dashboard/Portainer gated;
@@ -131,10 +131,10 @@ CP8 Hardening & ops (opt) .......... ☐
 - 2026-06-28 — CP1 nearly complete: verified toolchain (1.4), wired git remote via SSH and
   renamed default branch to `main` (1.5), created monorepo skeleton (1.6), `.gitignore` (1.7),
   root `Makefile` (1.8), confirmed CLAUDE.md/README placement and refreshed README's stale
-  "staging area" framing (1.9). Drafted `.wslconfig` (1.2) for human to apply — pending
+  "staging area" framing (1.9). Drafted `.wslconfig` (1.2) for me to apply — pending
   verification via `free -h`. Committed, pushed to `origin main`, tagged `cp1`.
 - 2026-06-28 — Verified 1.2 (`.wslconfig`): `free -h` shows ~23Gi mem / 8Gi swap (matches 24GB/8GB
-  cap); `nproc`=18 matches `processors=18`; user confirmed via Windows PowerShell that the host has
+  cap); `nproc`=18 matches `processors=18`; I confirmed via Windows PowerShell that the host has
   20 logical processors total, so 2 are correctly left for Windows. CP1 is now fully ☑ complete.
 - 2026-06-28 — CP2 underway: created the `web` network + conventions doc (2.1), scaffolded
   infrastructure/docker-compose.yml (2.2). Task 2.3 (Traefik) hit a real bug: `traefik:v3.1`/`v3.5`
@@ -149,28 +149,28 @@ CP8 Hardening & ops (opt) .......... ☐
   `infra-down` already pick up `infrastructure/.env` automatically (2.6). Verified routing locally —
   whoami/portainer return 200, `traefik.localhost` is gated by basic auth (401→200 with creds), an
   unmatched host falls through to 404 (2.7); modern browsers resolve `*.localhost` natively, no
-  `/etc/hosts` edit needed. Human set the Portainer admin password (2.8). Security review: no real
+  `/etc/hosts` edit needed. I set the Portainer admin password (2.8). Security review: no real
   secrets tracked, `.env` stays gitignored, both `docker.sock` mounts are read-only, only Traefik
   publishes host ports. CP2 fully ☑ complete, tagged `cp2`.
-- 2026-06-28 — CP3 human-prep underway (3.1): Hetzner's cost-optimised tier (x86 older-gen / Arm64
+- 2026-06-28 — CP3 my-prep underway (3.1): Hetzner's cost-optimised tier (x86 older-gen / Arm64
   Ampere) is out of stock during an outage, in every location — only "regular performance" (x86 AMD,
-  newer gen, shared vCPU) is available, at ~€20/mo instead of the ~€3.79/mo the spec assumed. User
+  newer gen, shared vCPU) is available, at ~€20/mo instead of the ~€3.79/mo the spec assumed. I
   decided to proceed now at €20/mo rather than wait or change provider, with the intent to resize down
   to the cheap tier once Hetzner's stock recovers (resize = brief downtime, no data loss). Locked
   Decisions unchanged (still Hetzner Cloud); this is a temporary stock issue, not a provider change.
 - 2026-06-29 — CP3 completed end to end. Generated a dedicated `data-lab-deploy` SSH key (no
-  passphrase, by user choice) and attached it at VPS creation (3.1) — VPS public IP
-  167.233.138.193, Ubuntu 24.04.4 LTS. Drafted `scripts/harden-vps.sh` for 3.2; human ran it. Hit a
+  passphrase, by my choice) and attached it at VPS creation (3.1) — VPS public IP
+  167.233.138.193, Ubuntu 24.04.4 LTS. Drafted `scripts/harden-vps.sh` for 3.2; I ran it. Hit a
   real lockout risk: the script's sudo user had no password, so once root SSH login was disabled
   there was briefly no way to gain root non-interactively — recovered via the still-open root
-  session (`passwd deploy`), then by user choice switched `deploy` to NOPASSWD sudo via
+  session (`passwd deploy`), then by my choice switched `deploy` to NOPASSWD sudo via
   `/etc/sudoers.d/deploy-nopasswd` so the remaining Operator tasks could run unattended over SSH.
   Installed Docker 29.6.1 + Compose v5.2.0 from the official apt repo (3.3). Repo is private, so
   3.4 synced just `infrastructure/` via `rsync` instead of `git clone`; created the `web` network;
-  human set `TRAEFIK_DASHBOARD_AUTH` directly in the VPS `.env` (hit a stale `nano` swap file from
+  I set `TRAEFIK_DASHBOARD_AUTH` directly in the VPS `.env` (hit a stale `nano` swap file from
   a dropped session on the first attempt, redone cleanly). Enabled Traefik's `le` certresolver,
   HTTP-01 on `web`, web→websecure redirect, and switched all routers to their `tarik-lab.dev`
-  hostnames (3.5); human added the wildcard + apex `A` records, confirmed resolving (3.6). Launched
+  hostnames (3.5); I added the wildcard + apex `A` records, confirmed resolving (3.6). Launched
   the stack — Let's Encrypt issued a valid cert for `whoami.tarik-lab.dev` on the first attempt,
   verified HTTP→HTTPS redirect and cert issuer (3.7). Security review (3.8) found one real issue:
   `infrastructure/.env` was `664` (world-readable) on the VPS — tightened to `600`; everything else

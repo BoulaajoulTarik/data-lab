@@ -1,51 +1,38 @@
-# Data Lab — Build Plan (Completion-First)
+# data-lab
 
-This is the **live working repo** for the data-lab build, running in the WSL2 Linux filesystem at
-`~/data-lab`.
+A self-hosted data-engineering lab, built and operated as a public portfolio: real infrastructure,
+a real VPS, real HTTPS, real CI/CD — not a tutorial sandbox.
 
-> **Important:** keep working here, in the **WSL2 Linux filesystem at `~/data-lab`**, not on the
-> Windows Desktop or under `/mnt/c`. Bind mounts and file-watching are slow/unreliable across that
-> filesystem boundary.
+**Live:** https://whoami.tarik-lab.dev · https://tarik-lab.dev (portfolio)
 
-## How this build is organized
+## What this is
 
-The work is grouped into **checkpoints**, each ending in something that visibly works plus a Git
-commit/tag (a safe resume point). The order follows a **walking skeleton**: prove the scary part —
-the public deploy chain — *early* with a throwaway container, then make it real.
+Everything here runs on a single Hetzner VPS behind Traefik, with TLS issued automatically via
+Let's Encrypt and every public service on one shared Docker network. The build follows a
+"walking skeleton" approach: prove the riskiest part first (getting a container onto the public
+internet over real HTTPS) with a throwaway service, then swap in real projects on the same rails.
 
-**Required path to a live portfolio (do these in order):**
+Built collaboratively with [Claude Code](https://claude.com/claude-code) as a hands-on exercise in
+agent-assisted infrastructure work — the agent drafts and operates, I own accounts, payments,
+secrets, and security-sensitive settings. See `docs/plan/` for the checkpoint-by-checkpoint build
+plan this lab was built from.
 
-| CP | File | You can show… |
-|---|---|---|
-| 1 | `cp1-local-foundation.md` | A clean monorepo + working toolchain |
-| 2 | `cp2-local-routing-proof.md` | A container routed through Traefik locally |
-| 3 | `cp3-live-on-vps.md` | **A public HTTPS URL that works** ← the milestone (`v0.1`) |
-| 4 | `cp4-real-project-cicd.md` | `git push` → auto-deploy of your FastAPI app (`v0.2`) |
+- **Reverse proxy / TLS:** Traefik v3, Let's Encrypt HTTP-01, per-host certs
+- **Hosting:** Hetzner Cloud VPS, hardened (key-only SSH, ufw, unattended-upgrades)
+- **Registry:** GHCR (public images)
+- **DNS:** wildcard record, flat subdomain scheme (`service.tarik-lab.dev`)
+- **CI/CD:** GitHub Actions → build → push to GHCR → deploy to VPS
 
-**Optional milestones (add later, zero rework — they're additive):**
+## Layout
 
-| CP | File | Adds |
-|---|---|---|
-| 5 | `cp5-monitoring.md` | Grafana + Prometheus + Loki + cAdvisor |
-| 6 | `cp6-minio-storage.md` | MinIO object storage + a data project that uses it |
-| 7 | `cp7-docs-site.md` | MkDocs docs site + 5 architecture diagrams |
-| 8 | `cp8-hardening-ops.md` | Backups, socket proxy, resource limits |
+| Path | What's there |
+|---|---|
+| `infrastructure/` | Shared stack — Traefik, Portainer, the `web` network conventions |
+| `projects/` | Individual services, each on its own subdomain (`_template` to copy from) |
+| `scripts/` | One-off operational scripts (VPS hardening, prereq checks) |
+| `docs/plan/` | The checkpoint-by-checkpoint build plan this lab was built from |
+| `CLAUDE.md` | Locked decisions, conventions, and current build status — the project's source of truth |
 
-## The anchor: `CLAUDE.md`
+## Current status
 
-`CLAUDE.md` holds the locked decisions, conventions, role definitions, and a **state tracker**. It is
-read at the start of every Claude Code session and updated at the end of every task. It is what keeps
-sequential agent sessions coherent. **Start here, keep it current.**
-
-## Locked decisions (summary)
-
-- **Domain:** `tarik-lab.dev` · **Subdomains:** flat (`grafana.tarik-lab.dev`, `<project>.tarik-lab.dev`)
-- **Internet path:** VPS only (Hetzner). No Cloudflare. **TLS:** Let's Encrypt **HTTP-01**. **DNS:** wildcard A record at the registrar.
-- **First project:** FastAPI · **Logs:** Loki Docker logging driver · **Registry:** GHCR (public images)
-- **Network:** `web` (shared external) · **Repo root:** `~/data-lab` (WSL2) · **Tooling:** Claude Code in WSL2
-
-## How to run the build
-
-Open Claude Code in your WSL2 terminal at `~/data-lab`. Work **one task at a time, in order**. After
-each task: verify its acceptance check, commit. After each checkpoint: tag. Hand the **human-prep**
-items (accounts, payment, secrets, security settings) to yourself; hand everything else to the agent.
+See `CLAUDE.md`'s State Tracker for up-to-date checkpoint status.

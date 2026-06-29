@@ -13,7 +13,7 @@ commit, tag `cp4` and `v0.2`.
 
 ---
 
-## Human prep
+## My prep
 - [ ] **Add GitHub Actions secrets** (Zone 2), pasted in the GitHub UI yourself: `VPS_SSH_KEY`
       (the deploy *private* key), `VPS_HOST` (VPS IP), `VPS_USER` (4.5).
 - [ ] **Confirm GHCR package visibility = public** for the image (one-time setting after first push).
@@ -67,7 +67,7 @@ make the package public once.
 ```
 **Acceptance:** a push produces a GHCR image (latest + sha). **Effort:** 🟠
 
-### 4.5 — Add GitHub Actions secrets  [Human]  [1×]
+### 4.5 — Add GitHub Actions secrets  [Me]  [1×]
 **What/Why:** Zone 2 credentials for the deploy hop. **How:** repo → Settings → Secrets and variables
 → Actions → add `VPS_SSH_KEY`, `VPS_HOST`, `VPS_USER`. Paste values yourself.
 **Acceptance:** three secrets exist with the exact names the workflow uses.

@@ -14,7 +14,7 @@ container, and Portainer loads. → commit, tag `cp2`.
 
 ---
 
-## Human prep
+## My prep
 - [ ] None external. One local step at the end: set a **Portainer admin password** on first login (2.8).
 - [ ] When the agent generates a Traefik dashboard basic-auth hash, you'll paste the **real** password into local `.env` (the agent uses a placeholder).
 
@@ -100,7 +100,7 @@ diagnose (not on `web`, wrong label, wrong port) and fix. Summarize the working 
 **Acceptance:** whoami.localhost returns the whoami page through Traefik; Portainer + dashboard load.
 **Effort:** 🟠
 
-### 2.8 — Set Portainer admin password  [Human]  [1×]
+### 2.8 — Set Portainer admin password  [Me]  [1×]
 **What/Why:** Avoid a default-cred admin surface even locally. **How:** open Portainer, set a strong
 password, store in your password manager.
 **Acceptance:** Portainer requires your password.

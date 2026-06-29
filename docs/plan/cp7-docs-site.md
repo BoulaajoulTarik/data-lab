@@ -11,7 +11,7 @@ reflect reality).
 
 ---
 
-## Human prep
+## My prep
 - [ ] None (all content/config). Just decide if the docs site should be public or gated (default: public — it's a portfolio).
 
 ---
