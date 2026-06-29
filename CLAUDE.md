@@ -67,6 +67,12 @@ These are my job; the agent advises but never performs them: account creation, p
 domain/DNS registrar actions, pasting secret values, SSH private-key custody, VPS security settings
 (firewall, sshd). Each checkpoint's **My prep** block lists the ones for that stage.
 
+## Required path status
+
+**COMPLETE as of 2026-06-30.** CP1 → CP2 → CP3 → CP4 are all ☑. The lab is a live,
+self-updating portfolio: `git push main` → CI lint+build → GHCR → VPS deploy → HTTPS.
+CP5–CP8 are optional enrichment — add anytime without rework.
+
 ## Where things are
 
 - Checkpoint specs: `docs/plan/cp1-…` through `docs/plan/cp8-…`.
@@ -118,7 +124,17 @@ CP3 LIVE on VPS (v0.1) ............. ☑ (VPS 167.233.138.193, https://whoami.ta
       acme.json 600 root:root; docker.sock mounts read-only; fixed infrastructure/.env perms
       664→600 on the VPS — was world-readable)
   3.9 Commit + tag cp3/v0.1 ........ ☑
-CP4 Real project + CI/CD (v0.2) .... ☐
+CP4 Real project + CI/CD (v0.2) .... ☑ (demo.tarik-lab.dev live, auto-deploys on push)
+  4.1 Project template _template ..... ☑
+  4.2 make new-project + demo scaffold  ☑ (FastAPI /, /health; routes via Traefik locally)
+  4.3 Demo Dockerfile ............... ☑ (slim Python, non-root, HEALTHCHECK)
+  4.4 build-push.yml → GHCR ......... ☑ (latest + sha tags, GHA cache)
+  4.5 GitHub Actions secrets ......... ☑ (me — VPS_SSH_KEY/HOST/USER set)
+  4.6 deploy.yml → VPS .............. ☑ (workflow_run after build; SSH pull + up)
+  4.7 CI quality gates .............. ☑ (ruff + docker compose config; gates build)
+  4.8 First automated deploy ......... ☑ (push → GHCR → VPS; demo.tarik-lab.dev live)
+  4.9 Security review ............... ☑ (no secrets in logs; admin UIs gated; VPS pulls public image)
+  4.10 Commit + tag ................. ☑
 CP5 Monitoring (optional) .......... ☐
 CP6 MinIO + data project (opt) ..... ☐
 CP7 Docs site + diagrams (opt) ..... ☐
@@ -176,3 +192,12 @@ CP8 Hardening & ops (opt) .......... ☐
   `infrastructure/.env` was `664` (world-readable) on the VPS — tightened to `600`; everything else
   (ports, auth gating, `acme.json` perms, read-only docker.sock mounts) checked out clean.
   CP3 fully ☑ complete, tagged `cp3` and `v0.1`.
+- 2026-06-30 — CP4 completed end to end. Tasks 4.1–4.4 (template, demo scaffold, Dockerfile,
+  build-push.yml) were already committed from prior session. Today: drafted and validated
+  deploy.yml (4.6) + quality gates in build-push.yml (4.7) + docker-compose.prod.yml; created
+  ~/demo/.env on VPS (4.8 prep); confirmed VPS_SSH_KEY needed to be the existing data-lab-deploy
+  key (new key generated on VPS had no authorized_keys entry — corrected). Pushed to main:
+  build-push ran in 30s (ruff ✓, compose validate ✓, image pushed to GHCR); deploy ran in ~18s
+  (SSH pull + up); https://demo.tarik-lab.dev/ returned {"service":"demo","version":"0.1.0"} on
+  the first attempt. Security review (4.9): no secrets in logs, admin UIs gated, VPS pulls only
+  the public GHCR image. CP4 fully ☑ complete. Required path CP1→CP4 is COMPLETE. Tagged cp4 + v0.2.
