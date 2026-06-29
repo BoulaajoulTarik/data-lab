@@ -1,0 +1,28 @@
+networks:
+  web:
+    external: true
+  internal:
+    driver: bridge
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PROJECT_NAME}.rule=Host(`${PROJECT_NAME}.tarik-lab.dev`)"
+      - "traefik.http.routers.${PROJECT_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${PROJECT_NAME}.tls.certresolver=le"
+      - "traefik.http.services.${PROJECT_NAME}.loadbalancer.server.port=8000"
+
+  # Example backing service — uncomment and adapt for databases, caches, workers.
+  # Internal-only: joins `internal`, carries no Traefik labels, unreachable from outside.
+  # db:
+  #   image: postgres:16-alpine
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   networks:
+  #     - internal

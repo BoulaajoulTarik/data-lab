@@ -28,7 +28,9 @@ new-project: ## Scaffold a new project from the template (name=X required)
 ifndef name
 	$(error name is required, e.g. make new-project name=demo)
 endif
+	@test ! -d projects/$(name) || (echo "projects/$(name) already exists" >&2 && exit 1)
 	cp -r projects/_template projects/$(name)
+	sed -i 's/^PROJECT_NAME=.*/PROJECT_NAME=$(name)/' projects/$(name)/.env.example
 	@echo "Created projects/$(name)"
 
 project-up: ## Start a project's stack (name=X required)
