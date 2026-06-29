@@ -14,6 +14,9 @@ optional capabilities. Favor finishing over scope.
 
 - **Domain:** `tarik-lab.dev`
 - **Subdomain scheme:** flat — `service.tarik-lab.dev` (e.g. `traefik.`, `portainer.`, `grafana.`, `demo.`, `<project>.`)
+- **Apex exception:** the bare domain `tarik-lab.dev` (no subdomain) serves the personal portfolio
+  webapp (`projects/webapp/`, standalone task — see `apex-webapp-task.md`), not a flat-scheme
+  service. Every other hostname still follows the flat subdomain scheme above.
 - **Internet path:** **VPS only** (Hetzner Cloud). Cloudflare Tunnel is NOT used.
 - **TLS:** Let's Encrypt via Traefik **HTTP-01** challenge (port 80). No DNS-01, no Cloudflare token.
 - **DNS:** a **wildcard A record** (`*.tarik-lab.dev` and `tarik-lab.dev` → VPS IP) at the registrar.
@@ -69,6 +72,8 @@ domain/DNS registrar actions, pasting secret values, SSH private-key custody, VP
 - Checkpoint specs: `cp1-…` through `cp8-…` (in repo root or `docs/plan/`).
 - Required path: CP1 → CP2 → CP3 (live, `v0.1`) → CP4 (CI/CD, `v0.2`).
 - Optional: CP5 monitoring, CP6 MinIO, CP7 docs+diagrams, CP8 hardening.
+- Standalone, out-of-scope task: `apex-webapp-task.md` — deploy a personal portfolio page at the
+  apex `tarik-lab.dev`. Not part of CP1–CP8, does not touch the State Tracker, separate from CP4.
 
 ## State tracker (living — keep current)
 

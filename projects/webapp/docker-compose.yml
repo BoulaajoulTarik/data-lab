@@ -1,0 +1,19 @@
+networks:
+  web:
+    external: true
+
+services:
+  webapp:
+    image: nginx:1.30.3-alpine
+    restart: unless-stopped
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./resume:/usr/share/nginx/html/resume:ro
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webapp.rule=Host(`tarik-lab.dev`)"
+      - "traefik.http.routers.webapp.entrypoints=websecure"
+      - "traefik.http.routers.webapp.tls.certresolver=le"
+      - "traefik.http.services.webapp.loadbalancer.server.port=80"

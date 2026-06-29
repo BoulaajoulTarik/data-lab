@@ -13,5 +13,10 @@ __pycache__/
 
 backups/
 
+# Source-of-truth content lives in projects/webapp/; this doc bundle is a local
+# working copy (design spec, French translation, roadmap, handoff notes) and a
+# duplicate of index.html/resume/ kept around for reference, not tracked in git.
+infrastructure/docs/webapp_doc/
+
 # Machine-local Claude Code permission state, not shared config.
 .claude/settings.local.json

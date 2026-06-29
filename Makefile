@@ -1,4 +1,4 @@
-.PHONY: help infra-up infra-down infra-logs new-project project-up project-down logs deploy
+.PHONY: help infra-up infra-down infra-logs new-project project-up project-down logs deploy webapp-up webapp-down webapp-logs
 
 help: ## Show this help
 	@echo "Available targets:"
@@ -11,6 +11,9 @@ help: ## Show this help
 	@echo "  project-down name=X   Stop a project's stack"
 	@echo "  logs name=X           Tail a project's logs"
 	@echo "  deploy                Deploy (wired in CP4)"
+	@echo "  webapp-up             Start the apex portfolio webapp (tarik-lab.dev)"
+	@echo "  webapp-down           Stop the apex portfolio webapp"
+	@echo "  webapp-logs           Tail the apex portfolio webapp logs"
 
 infra-up: ## Start shared infrastructure
 	docker compose -f infrastructure/docker-compose.yml up -d
@@ -48,3 +51,12 @@ endif
 
 deploy: ## Deploy
 	@echo "wired in CP4"
+
+webapp-up: ## Start the apex portfolio webapp (tarik-lab.dev)
+	docker compose -f projects/webapp/docker-compose.yml up -d
+
+webapp-down: ## Stop the apex portfolio webapp
+	docker compose -f projects/webapp/docker-compose.yml down
+
+webapp-logs: ## Tail the apex portfolio webapp logs
+	docker compose -f projects/webapp/docker-compose.yml logs -f

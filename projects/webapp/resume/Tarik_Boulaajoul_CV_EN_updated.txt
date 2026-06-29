@@ -1,0 +1,258 @@
+Tarik Boulaajoul                                                          CONTACT
+
+                                                  Casablanca, Morocco
+                                                  Phone : (+212) 6 72 67 00 48
+                                                  Email : boulaajoul.tarik@gmail.com
+
+================================================================================
+                       Data & Business Intelligence Engineer
+================================================================================
+
+EDUCATION
+---------
+
+Degrees
+
+  2019: State Engineer Degree in e-Management and Business Intelligence,
+        ENSIAS, Rabat
+  2015: Preparatory Classes MPSI-MP Option, Ibn Ghazi Center, Rabat
+  2011: Scientific Baccalaureate - Mathematics Specialization,
+        Charif El Idrissi High School, Tetouan
+
+Training
+
+  - Training in Data and Business Intelligence Engineering, preparatory
+    classes MPSI.
+
+
+SKILLS
+------
+
+Functional Skills
+
+  - Business needs analysis, project planning, KPI development.
+  - Translation of business needs into relevant analytical solutions.
+  - Team management, coaching, and coordination.
+  - Writing skills: synthesis, reporting (French, English), documentation
+    and best practices.
+
+Technical Skills
+
+  - Python, Scala, Java, JavaScript, PHP, C#, SQL, Spark, DAX.
+  - Power BI (DAX, modeling, governance), Tableau, dbt, Azure Data Factory,
+    AWS Cloud Services, ElasticSearch.
+  - Database management: SQL Server, Oracle, PostgreSQL, HANA, MySQL,
+    Azure SQL, Neo4J, Hive.
+  - Hadoop, Airflow, Docker, Bash, Unix.
+  - Git (CI/CD) with SourceTree, GitLab.
+  - Pipeline optimization, mathematical modeling, advanced probabilities,
+    graph theory, statistics.
+
+
+LANGUAGES
+---------
+
+  French:  Fluent
+  English: Fluent
+
+
+================================================================================
+                            PROFESSIONAL EXPERIENCE
+================================================================================
+
+--------------------------------------------------------------------------------
+March 2025                                                       Assist Digital
+Present                                                          Data Analyst
+--------------------------------------------------------------------------------
+
+Project:
+
+  - Data & BI modernization program for a Business Process Outsourcing (BPO)
+    provider operating call-center services. The mission focused on migrating
+    the legacy reporting stack — Python scripts producing Excel files — to a
+    modern, governed data platform built on Apache Airflow and dbt for
+    orchestration and transformation, with Power BI as the visualization
+    layer. The dashboards delivered span operational monitoring of agent
+    performance to executive-level KPIs tracking activity over months and
+    years, serving multiple internal teams and external clients.
+
+Team:
+
+  - 2 Data Analysts and 1 Data Architect (external freelance), in close
+    interaction with operations managers and business stakeholders.
+
+Responsibilities:
+
+  - Migrated the legacy reporting pipeline (Python scripts producing Excel
+    files) to a modern Airflow + dbt + Power BI stack, eliminating manual
+    processing and enabling reliable, daily-refreshed dashboards.
+  - Designed and delivered Power BI dashboards across multiple business
+    layers — from operational dashboards tracking daily agent performance to
+    consolidated executive KPI dashboards covering monthly and yearly
+    activity trends.
+  - Built a custom ETL pipeline for a new client onboarding, ingesting data
+    from their internal tools and structuring it into a Bronze / Silver /
+    Gold (medallion) architecture feeding a well-modeled data warehouse
+    connected to Power BI reports.
+  - Led the migration of legacy Tableau Server reports to Power BI: audited
+    the existing reporting catalog and prioritized which reports to retain,
+    modernize, or decommission based on business usage and value.
+  - Optimized end-to-end pipeline performance and reduced infrastructure
+    costs by replacing an expensive incumbent BI license with a leaner, more
+    performant alternative aligned with actual business needs.
+  - Developed a lightweight web interface allowing business users to upload
+    CSV files and update reference data autonomously, improving data-entry
+    workflows and reducing dependency on the data team.
+  - Contributed to data governance and data quality across the medallion
+    layers, ensuring traceability and reliability from raw ingestion through
+    to consumption by the business.
+
+Technical Environment:
+
+  Power BI (DAX, semantic modeling, governance), Apache Airflow, dbt, SQL,
+  Python, Tableau (audit & migration), medallion architecture
+  (Bronze/Silver/Gold), Git, Agile/Scrum.
+
+
+--------------------------------------------------------------------------------
+May 2022                                                Orange Business Services
+March 2025                                              Big Data Analyst
+--------------------------------------------------------------------------------
+
+Project:
+
+  - Participated in a strategic data transformation program aimed at
+    strengthening the operational reliability and decision-making
+    performance of an international telecom operator. The project involved
+    industrializing Big Data flows, implementing predictive analytics
+    capabilities, and leveraging data through KPIs aligned with business
+    priorities. The work was done in collaboration with a multidisciplinary
+    team and a functional sponsor representing strategic company priorities.
+
+Team:
+
+  - 1 Data Analyst, 1 Program Manager, 1 Power BI Specialist, 1 Tech Lead,
+    and a Functional Sponsor representing high-level business priorities.
+
+Responsibilities:
+
+  - Designed and developed distributed data pipelines with Apache Spark,
+    ensuring resilient architecture and scalable Big Data processing
+    capabilities.
+  - Defined and implemented predictive analytics models to proactively
+    identify and mitigate critical system incidents.
+  - Designed dynamic dashboards and defined business KPIs to drive
+    real-time performance monitoring and decision-making.
+  - Collaborated closely with a Functional Sponsor and cross-functional
+    teams to align data solutions with business strategy and priorities.
+  - Contributed to performance optimization initiatives, reducing data
+    processing times by up to 60% through targeted improvements.
+
+Technical Environment:
+
+  Apache Spark, Hive, HDFS, Python, Unix, Power BI, SQL, Git, Bash,
+  Agile/Scrum.
+
+
+--------------------------------------------------------------------------------
+May 2021                                                          Grupo Avalon
+April 2022                                                        Data Engineer
+--------------------------------------------------------------------------------
+
+Project:
+
+  - Integration and consolidation of data from heterogeneous systems into a
+    unified enterprise architecture aimed at enhancing operational analytics
+    and service quality. The project focused on building reliable data
+    pipelines, automating processing workflows, and standardizing data
+    references across the organization.
+
+Team:
+
+  - 1 Data Engineer, 1 SAP Functional Analyst, 1 QA Lead, 1 Tech Lead, with
+    regular coordination with a business domain expert in SAP.
+
+Responsibilities:
+
+  - Designed and maintained robust ETL pipelines for extracting,
+    transforming, and cleansing complex datasets.
+  - Extracted high-value data from SQL Server and SAP HANA to support
+    multidimensional analytics and reporting.
+  - Integrated diverse data streams into a centralized analytical platform,
+    improving data accessibility and consistency.
+  - Enhanced validation scripts and implemented automated checks to
+    minimize data load errors and improve data quality.
+  - Contributed to defining data governance standards and produced
+    technical documentation to support long-term scalability.
+
+Technical Environment:
+
+  Python, Bash, SQL Server, SAP HANA, SAP Data Services, Unix, Git,
+  Agile/Scrum.
+
+
+--------------------------------------------------------------------------------
+February 2020                                                              NGIS
+January 2021                                          Business Intelligence Analyst
+--------------------------------------------------------------------------------
+
+Project:
+
+  - Delivery of a cloud-native BI environment for an SME specializing in
+    insurance file management. The project aimed to centralize historical
+    data, automate report generation, and equip decision-makers with
+    interactive performance-oriented dashboards.
+
+Team:
+
+  - 1 Full-Stack Developer, 1 BI Analyst.
+
+Responsibilities:
+
+  - Conducted in-depth analysis of business needs and translated them into
+    measurable KPIs tailored to various operational functions.
+  - Designed and deployed automated ETL pipelines using Airflow and Pandas
+    to streamline data preparation.
+  - Migrated and integrated structured data into a centralized AWS-based
+    data warehouse to enhance analytical accessibility.
+  - Developed customized Power BI dashboards for different user personas,
+    enabling real-time performance tracking.
+  - Implemented data governance rules and provided training and support
+    to end users for tool adoption and usage consistency.
+
+Technical Environment:
+
+  Airflow, Python, Pandas, Power BI, AWS S3/RDS, SQL, Agile.
+
+
+--------------------------------------------------------------------------------
+March 2019                                                       TraInvestment
+September 2019                                                Data Science Intern
+--------------------------------------------------------------------------------
+
+Project:
+
+  - Development of a real-time fraud detection system designed to analyze
+    suspicious behavioral patterns. The project focused on building a
+    scalable data infrastructure incorporating data mining algorithms and
+    automated ETL workflows for continuous analysis.
+
+Team:
+
+  - 2 Engineering Interns, 1 Technical Supervisor, 1 Business Lead, with
+    support from the infrastructure team.
+
+Responsibilities:
+
+  - Designed the end-to-end architecture of the fraud detection system,
+    ensuring scalability and modularity.
+  - Developed ETL workflows and integrated behavioral analysis models into
+    the data pipeline.
+  - Implemented anomaly detection metrics and risk indicators to
+    proactively flag suspicious activities.
+  - Authored technical documentation and presented key findings to the
+    project steering committee.
+
+Technical Environment:
+
+  Python, Flask, Airflow, Unix/Linux, Git.
