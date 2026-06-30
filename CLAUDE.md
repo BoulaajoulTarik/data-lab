@@ -135,7 +135,7 @@ CP4 Real project + CI/CD (v0.2) .... ☑ (demo.tarik-lab.dev live, auto-deploys 
   4.8 First automated deploy ......... ☑ (push → GHCR → VPS; demo.tarik-lab.dev live)
   4.9 Security review ............... ☑ (no secrets in logs; admin UIs gated; VPS pulls public image)
   4.10 Commit + tag ................. ☑
-CP5 Monitoring (optional) .......... ☐
+CP5 Monitoring (optional) .......... ☑ (grafana.tarik-lab.dev live, provisioned datasources + dashboard, tagged cp5)
 CP6 MinIO + data project (opt) ..... ☐
 CP7 Docs site + diagrams (opt) ..... ☐
 CP8 Hardening & ops (opt) .......... ☐
@@ -201,3 +201,9 @@ CP8 Hardening & ops (opt) .......... ☐
   (SSH pull + up); https://demo.tarik-lab.dev/ returned {"service":"demo","version":"0.1.0"} on
   the first attempt. Security review (4.9): no secrets in logs, admin UIs gated, VPS pulls only
   the public GHCR image. CP4 fully ☑ complete. Required path CP1→CP4 is COMPLETE. Tagged cp4 + v0.2.
+- 2026-06-30 — CP5 completed. Loki Docker logging driver (v3.7.2-amd64) installed on VPS; Loki
+  (3.6.12) ships container logs. Prometheus (3.12.0) scrapes cadvisor (0.55.1) + Traefik metrics.
+  Grafana (13.1.0) provisioned with both datasources and a Lab Overview dashboard (CPU, memory,
+  logs panels). Grafana gated at grafana.tarik-lab.dev (anonymous access off, sign-up off).
+  Hit: GF_SECURITY_ADMIN_PASSWORD with $ char caused auth issues — reset via grafana cli.
+  CP5 fully ☑ complete, tagged cp5.
