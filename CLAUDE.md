@@ -137,7 +137,7 @@ CP4 Real project + CI/CD (v0.2) .... ☑ (demo.tarik-lab.dev live, auto-deploys 
   4.10 Commit + tag ................. ☑
 CP5 Monitoring (optional) .......... ☑ (grafana.tarik-lab.dev live, provisioned datasources + dashboard, tagged cp5)
 CP6 MinIO + data project (opt) ..... ☑ (minio.tarik-lab.dev + console.tarik-lab.dev live, ingest.tarik-lab.dev writes Parquet to demo-data, tagged cp6)
-CP7 Docs site + diagrams (opt) ..... ☐
+CP7 Docs site + diagrams (opt) ..... ☑ (docs.tarik-lab.dev live, MkDocs Material + nginx, 5 Mermaid diagrams, tagged cp7)
 CP8 Hardening & ops (opt) .......... ☐
 ```
 
@@ -212,3 +212,7 @@ CP8 Hardening & ops (opt) .......... ☐
   (policy: read/write demo-data only). Ingest FastAPI project writes synthetic sensor Parquet on
   startup and exposes /ingest + /summary endpoints. CI/CD extended with parallel build+deploy jobs.
   ingest.tarik-lab.dev confirmed live with object in MinIO. CP6 fully ☑ complete, tagged cp6.
+- 2026-07-01 — CP7 completed. MkDocs Material 9.6.20 multi-stage build (build → nginx 1.30.3-alpine)
+  serving static site at docs.tarik-lab.dev. Five Mermaid diagrams covering ecosystem, infra
+  internals, request routing, CI/CD, and project anatomy. Overview, Operations, Security pages
+  written. No secrets in public docs. CP7 fully ☑ complete, tagged cp7.
