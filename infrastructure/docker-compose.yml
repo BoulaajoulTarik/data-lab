@@ -19,10 +19,7 @@ volumes:
   loki_data:
   prometheus_data:
   grafana_data:
-  # minio_data:        # placeholder — wired in CP6
-
-# --- Storage (optional, CP6) ---------------------------------------------------
-# minio: added in CP6
+  minio_data:
 
 services:
   # --- Routing -----------------------------------------------------------------
@@ -138,6 +135,37 @@ services:
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls.certresolver=le"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+  # --- Storage (CP6) -----------------------------------------------------------
+  minio:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    restart: unless-stopped
+    <<: *loki-logging
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    ports:
+      # Loopback only — for mc/boto3 checks from the host; public access goes via Traefik.
+      - "127.0.0.1:9000:9000"
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      # S3 API
+      - "traefik.http.routers.minio-api.rule=Host(`minio.tarik-lab.dev`)"
+      - "traefik.http.routers.minio-api.entrypoints=websecure"
+      - "traefik.http.routers.minio-api.tls.certresolver=le"
+      - "traefik.http.routers.minio-api.service=minio-api-svc"
+      - "traefik.http.services.minio-api-svc.loadbalancer.server.port=9000"
+      # Console
+      - "traefik.http.routers.minio-console.rule=Host(`console.tarik-lab.dev`)"
+      - "traefik.http.routers.minio-console.entrypoints=websecure"
+      - "traefik.http.routers.minio-console.tls.certresolver=le"
+      - "traefik.http.routers.minio-console.service=minio-console-svc"
+      - "traefik.http.services.minio-console-svc.loadbalancer.server.port=9001"
 
   loki:
     image: grafana/loki:3.6.12

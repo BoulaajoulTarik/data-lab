@@ -1,0 +1,17 @@
+networks:
+  web:
+    external: true
+
+services:
+  app:
+    image: ${INGEST_IMAGE}
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ingest.rule=Host(`ingest.tarik-lab.dev`)"
+      - "traefik.http.routers.ingest.entrypoints=websecure"
+      - "traefik.http.routers.ingest.tls.certresolver=le"
+      - "traefik.http.services.ingest.loadbalancer.server.port=8000"
