@@ -1,0 +1,41 @@
+site_name: tarik-lab.dev
+site_description: Self-hosted data-engineering lab — portfolio and learning environment
+site_url: https://docs.tarik-lab.dev
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - toc.integrate
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+  - tables
+  - admonition
+
+nav:
+  - Overview: index.md
+  - Architecture:
+    - Ecosystem: architecture/01-ecosystem.md
+    - Infrastructure internals: architecture/02-infra-internals.md
+    - Request routing: architecture/03-request-routing.md
+    - CI/CD pipeline: architecture/04-cicd.md
+    - Project anatomy: architecture/05-project-anatomy.md
+  - Operations: operations.md
+  - Security: security.md

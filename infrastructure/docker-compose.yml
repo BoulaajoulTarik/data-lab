@@ -136,6 +136,22 @@ services:
       - "traefik.http.routers.grafana.tls.certresolver=le"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
+  # --- Docs site (CP7) ---------------------------------------------------------
+  docs:
+    build:
+      context: .
+      dockerfile: docs-site/Dockerfile
+    image: data-lab-docs:local
+    restart: unless-stopped
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.docs.rule=Host(`docs.tarik-lab.dev`)"
+      - "traefik.http.routers.docs.entrypoints=websecure"
+      - "traefik.http.routers.docs.tls.certresolver=le"
+      - "traefik.http.services.docs.loadbalancer.server.port=80"
+
   # --- Storage (CP6) -----------------------------------------------------------
   minio:
     image: minio/minio:RELEASE.2025-09-07T16-13-09Z
