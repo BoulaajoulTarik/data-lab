@@ -12,6 +12,9 @@ x-loki-logging: &loki-logging
 networks:
   web:
     external: true
+  internal:
+    driver: bridge
+    internal: true
 
 volumes:
   portainer_data:
@@ -22,11 +25,48 @@ volumes:
   minio_data:
 
 services:
+  # --- Docker socket proxy (CP8) -----------------------------------------------
+  # Filters the Docker API so consumers only reach the endpoints they need.
+  # Lives on `internal` only — never reachable from `web`.
+  # Permissions are the union of all consumer needs, documented per consumer below.
+  socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.3.0
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      # Traefik — service discovery: list containers + networks (read-only)
+      CONTAINERS: 1
+      NETWORKS: 1
+      # cAdvisor — metrics: container stats + events
+      # (cAdvisor also keeps its /var/run host mount for cgroup/containerd access;
+      #  the proxy covers its Docker API calls if configured via --docker flag)
+      STATS: 1
+      EVENTS: 1
+      # Portainer — container management: broader set, no Swarm endpoints
+      IMAGES: 1
+      VOLUMES: 1
+      INFO: 1
+      VERSION: 1
+      EXEC: 1
+      POST: 1    # allows start / stop / restart / create
+      DELETE: 1  # allows remove / prune
+      BUILD: 1   # allows image builds from Portainer
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 64M
+
   # --- Routing -----------------------------------------------------------------
   traefik:
     image: traefik:v3.7.5
     restart: unless-stopped
     <<: *loki-logging
+    depends_on:
+      - socket-proxy
     command:
       - "--configFile=/etc/traefik/traefik.yml"
     ports:
@@ -35,10 +75,14 @@ services:
     volumes:
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - letsencrypt:/letsencrypt
-      # Mounted read-only for now; a socket proxy is added in CP8.
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - web
+      - internal
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.tarik-lab.dev`)"
@@ -53,12 +97,20 @@ services:
     image: portainer/portainer-ce:2.39.4
     restart: unless-stopped
     <<: *loki-logging
+    depends_on:
+      - socket-proxy
+    environment:
+      - DOCKER_HOST=tcp://socket-proxy:2375
     volumes:
       - portainer_data:/data
-      # Mounted read-only for now; a socket proxy is added in CP8.
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - web
+      - internal
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.rule=Host(`portainer.tarik-lab.dev`)"
@@ -75,6 +127,11 @@ services:
     <<: *loki-logging
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 32M
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`whoami.tarik-lab.dev`)"
@@ -98,6 +155,11 @@ services:
       - "127.0.0.1:9090:9090"
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.55.1
@@ -115,6 +177,11 @@ services:
       - /dev/disk/:/dev/disk:ro
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
 
   grafana:
     image: grafana/grafana:13.1.0
@@ -129,6 +196,11 @@ services:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.grafana.rule=Host(`grafana.tarik-lab.dev`)"
@@ -145,6 +217,11 @@ services:
     restart: unless-stopped
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 64M
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.docs.rule=Host(`docs.tarik-lab.dev`)"
@@ -168,6 +245,11 @@ services:
       - "127.0.0.1:9000:9000"
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
     labels:
       - "traefik.enable=true"
       # S3 API
@@ -196,3 +278,8 @@ services:
       - "127.0.0.1:3100:3100"
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M

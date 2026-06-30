@@ -9,6 +9,11 @@ services:
     env_file: .env
     networks:
       - web
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.demo.rule=Host(`demo.tarik-lab.dev`)"

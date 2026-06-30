@@ -1,4 +1,4 @@
-.PHONY: help infra-up infra-down infra-logs new-project project-up project-down logs deploy webapp-up webapp-down webapp-logs
+.PHONY: help infra-up infra-down infra-logs new-project project-up project-down logs deploy webapp-up webapp-down webapp-logs backup
 
 help: ## Show this help
 	@echo "Available targets:"
@@ -14,6 +14,7 @@ help: ## Show this help
 	@echo "  webapp-up             Start the apex portfolio webapp (tarik-lab.dev)"
 	@echo "  webapp-down           Stop the apex portfolio webapp"
 	@echo "  webapp-logs           Tail the apex portfolio webapp logs"
+	@echo "  backup                Back up all stateful Docker volumes to backups/"
 
 infra-up: ## Start shared infrastructure
 	docker compose -f infrastructure/docker-compose.yml up -d
@@ -62,3 +63,6 @@ webapp-down: ## Stop the apex portfolio webapp
 
 webapp-logs: ## Tail the apex portfolio webapp logs
 	docker compose -f projects/webapp/docker-compose.yml logs -f
+
+backup: ## Back up all stateful Docker volumes to backups/
+	./scripts/backup-volumes.sh

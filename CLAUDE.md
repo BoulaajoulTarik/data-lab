@@ -138,7 +138,7 @@ CP4 Real project + CI/CD (v0.2) .... ☑ (demo.tarik-lab.dev live, auto-deploys 
 CP5 Monitoring (optional) .......... ☑ (grafana.tarik-lab.dev live, provisioned datasources + dashboard, tagged cp5)
 CP6 MinIO + data project (opt) ..... ☑ (minio.tarik-lab.dev + console.tarik-lab.dev live, ingest.tarik-lab.dev writes Parquet to demo-data, tagged cp6)
 CP7 Docs site + diagrams (opt) ..... ☑ (docs.tarik-lab.dev live, MkDocs Material + nginx, 5 Mermaid diagrams, tagged cp7)
-CP8 Hardening & ops (opt) .......... ☐
+CP8 Hardening & ops (opt) .......... ☑ (socket proxy + resource limits + volume backups, tagged cp8)
 ```
 
 ## Session log (append a line per session)
@@ -216,3 +216,11 @@ CP8 Hardening & ops (opt) .......... ☐
   serving static site at docs.tarik-lab.dev. Five Mermaid diagrams covering ecosystem, infra
   internals, request routing, CI/CD, and project anatomy. Overview, Operations, Security pages
   written. No secrets in public docs. CP7 fully ☑ complete, tagged cp7.
+- 2026-07-01 — CP8 completed. Docker socket proxy (tecnativa/docker-socket-proxy:0.3.0) on an
+  `internal` network filters the Docker API; Traefik repointed via traefik.yml endpoint, Portainer
+  via DOCKER_HOST — both lose their direct docker.sock mounts. cAdvisor keeps /var/run:ro
+  (privileged metrics collector, justified). CPU+memory limits added to all infra services and
+  project prod compose files (headroom for 4 vCPU / 8 GB VPS). Volume backup script
+  (scripts/backup-volumes.sh + make backup) archives all stateful volumes via a temporary Alpine
+  container; restore procedure in infrastructure/docs/operations/backups.md. Security checklist at
+  infrastructure/docs/security/checklist.md. CP8 fully ☑ complete, tagged cp8.
