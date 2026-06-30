@@ -1,3 +1,14 @@
+x-loki-logging: &loki-logging
+  logging:
+    driver: loki
+    options:
+      loki-url: "http://localhost:3100/loki/api/v1/push"
+      loki-batch-size: "400"
+      loki-retries: "3"
+      loki-min-backoff: "1s"
+      loki-max-backoff: "10s"
+      loki-timeout: "10s"
+
 networks:
   web:
     external: true
@@ -5,13 +16,10 @@ networks:
 volumes:
   portainer_data:
   letsencrypt:
+  loki_data:
+  prometheus_data:
+  grafana_data:
   # minio_data:        # placeholder — wired in CP6
-  # grafana_data:      # placeholder — wired in CP5
-  # prometheus_data:   # placeholder — wired in CP5
-  # loki_data:         # placeholder — wired in CP5 (Loki Docker logging driver, not Promtail)
-
-# --- Monitoring (optional, CP5) ------------------------------------------------
-# grafana, prometheus, loki: added in CP5
 
 # --- Storage (optional, CP6) ---------------------------------------------------
 # minio: added in CP6
@@ -21,6 +29,7 @@ services:
   traefik:
     image: traefik:v3.7.5
     restart: unless-stopped
+    <<: *loki-logging
     command:
       - "--configFile=/etc/traefik/traefik.yml"
     ports:
@@ -46,6 +55,7 @@ services:
   portainer:
     image: portainer/portainer-ce:2.39.4
     restart: unless-stopped
+    <<: *loki-logging
     volumes:
       - portainer_data:/data
       # Mounted read-only for now; a socket proxy is added in CP8.
@@ -65,6 +75,7 @@ services:
   whoami:
     image: traefik/whoami:v1.11.0
     restart: unless-stopped
+    <<: *loki-logging
     networks:
       - web
     labels:
@@ -72,3 +83,72 @@ services:
       - "traefik.http.routers.whoami.rule=Host(`whoami.tarik-lab.dev`)"
       - "traefik.http.routers.whoami.entrypoints=websecure"
       - "traefik.http.routers.whoami.tls.certresolver=le"
+
+  # --- Monitoring (CP5) --------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:v3.12.0
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+      - "--web.enable-lifecycle"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      # Loopback only — for local curl checks; Grafana reaches it via container name.
+      - "127.0.0.1:9090:9090"
+    networks:
+      - web
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.55.1
+    restart: unless-stopped
+    # privileged gives cAdvisor full host metrics; on WSL2 some cgroup metrics
+    # may still be partial — they are complete on the native-Linux VPS.
+    privileged: true
+    devices:
+      - /dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - web
+
+  grafana:
+    image: grafana/grafana:13.1.0
+    restart: unless-stopped
+    <<: *loki-logging
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.tarik-lab.dev`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=le"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+  loki:
+    image: grafana/loki:3.6.12
+    restart: unless-stopped
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+      - loki_data:/loki
+    ports:
+      # Bound to loopback only — the Docker logging driver reaches Loki via
+      # localhost:3100 on the host; Grafana reaches it via container name on `web`.
+      - "127.0.0.1:3100:3100"
+    networks:
+      - web
