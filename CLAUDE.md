@@ -136,7 +136,7 @@ CP4 Real project + CI/CD (v0.2) .... ☑ (demo.tarik-lab.dev live, auto-deploys 
   4.9 Security review ............... ☑ (no secrets in logs; admin UIs gated; VPS pulls public image)
   4.10 Commit + tag ................. ☑
 CP5 Monitoring (optional) .......... ☑ (grafana.tarik-lab.dev live, provisioned datasources + dashboard, tagged cp5)
-CP6 MinIO + data project (opt) ..... ☐
+CP6 MinIO + data project (opt) ..... ☑ (minio.tarik-lab.dev + console.tarik-lab.dev live, ingest.tarik-lab.dev writes Parquet to demo-data, tagged cp6)
 CP7 Docs site + diagrams (opt) ..... ☐
 CP8 Hardening & ops (opt) .......... ☐
 ```
@@ -207,3 +207,8 @@ CP8 Hardening & ops (opt) .......... ☐
   logs panels). Grafana gated at grafana.tarik-lab.dev (anonymous access off, sign-up off).
   Hit: GF_SECURITY_ADMIN_PASSWORD with $ char caused auth issues — reset via grafana cli.
   CP5 fully ☑ complete, tagged cp5.
+- 2026-07-01 — CP6 completed. MinIO (RELEASE.2025-09-07, last OSS release — repo archived Apr 2026)
+  at minio.tarik-lab.dev (S3 API) + console.tarik-lab.dev. demo-data bucket + scoped access key
+  (policy: read/write demo-data only). Ingest FastAPI project writes synthetic sensor Parquet on
+  startup and exposes /ingest + /summary endpoints. CI/CD extended with parallel build+deploy jobs.
+  ingest.tarik-lab.dev confirmed live with object in MinIO. CP6 fully ☑ complete, tagged cp6.
