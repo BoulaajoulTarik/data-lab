@@ -107,7 +107,8 @@ CP2 Local routing proof ............ ☑
   2.7 Verify routing locally ........ ☑ (whoami/portainer 200, traefik.localhost 401→200 w/ auth, unmatched host 404; *.localhost needs no /etc/hosts edit in modern browsers)
   2.8 Portainer admin password ...... ☑ (me — done)
   2.9 Commit + tag cp2 .............. ☑
-CP3 LIVE on VPS (v0.1) ............. ☑ (VPS 167.233.138.193, https://whoami.tarik-lab.dev live)
+CP3 LIVE on VPS (v0.1) ............. ☑ (VPS 167.233.232.229 as of 2026-07-01 migration — see
+    session log; originally 167.233.138.193; https://whoami.tarik-lab.dev live)
   3.1 Provision the VPS ............ ☑ (me — Hetzner regular-performance tier, Ubuntu 24.04.4 LTS)
   3.2 Harden the VPS ............... ☑ (drafted scripts/harden-vps.sh; I ran it — sudo user
       `deploy`, ufw 22/80/443 only, root login + password auth disabled, unattended-upgrades on;
@@ -124,7 +125,8 @@ CP3 LIVE on VPS (v0.1) ............. ☑ (VPS 167.233.138.193, https://whoami.ta
       acme.json 600 root:root; docker.sock mounts read-only; fixed infrastructure/.env perms
       664→600 on the VPS — was world-readable)
   3.9 Commit + tag cp3/v0.1 ........ ☑
-CP4 Real project + CI/CD (v0.2) .... ☑ (demo.tarik-lab.dev live, auto-deploys on push)
+CP4 Real project + CI/CD (v0.2) .... ☑ (demo decommissioned 2026-07-01, see session log — CI/CD
+    pattern it proved lives on in ingest's build-push/deploy jobs)
   4.1 Project template _template ..... ☑
   4.2 make new-project + demo scaffold  ☑ (FastAPI /, /health; routes via Traefik locally)
   4.3 Demo Dockerfile ............... ☑ (slim Python, non-root, HEALTHCHECK)
@@ -224,3 +226,21 @@ CP8 Hardening & ops (opt) .......... ☑ (socket proxy + resource limits + volum
   (scripts/backup-volumes.sh + make backup) archives all stateful volumes via a temporary Alpine
   container; restore procedure in infrastructure/docs/operations/backups.md. Security checklist at
   infrastructure/docs/security/checklist.md. CP8 fully ☑ complete, tagged cp8.
+- 2026-07-01 — Standalone VPS migration (docs/plan/vps-migration-task.md), off the required/optional
+  path, not tied to a CP or tag. Hetzner's cost-optimised x86 tier came back in stock (renamed CX23,
+  same specs originally scoped as CX22: 2 vCPU/4 GB RAM/40 GB disk, ~€3.79-4.59/mo) after being
+  unavailable during CP3 provisioning. Resize-in-place wasn't possible — Hetzner blocks rescaling a
+  server onto a plan with less disk than it already has, and the original box was provisioned
+  directly at 75 GB. Bought a new CX23 (167.233.232.229), ran scripts/harden-vps.sh unchanged,
+  installed Docker 29.6.1 + the Loki logging plugin (grafana/loki-docker-driver:3.7.2-amd64 — easy
+  to forget, it's host-level not in any compose file), synced infrastructure/ + projects/ingest +
+  projects/webapp and restored the minio/grafana/prometheus/loki/portainer volumes from a fresh
+  backup (skipped acme.json — new box issues its own certs). Verified every service internally
+  before touching DNS, then cut the wildcard + apex A records to the new IP; Traefik needed a manual
+  restart to pick up the DNS change and re-issue ACME certs promptly (its background retry didn't
+  fire fast enough on its own). Confirmed a real `git push` deploys cleanly to the new box via the
+  updated `VPS_HOST` secret. Decided during this task to decommission `projects/demo` (the CP4
+  walking-skeleton project) rather than migrate it — removed its build-push-demo/deploy-demo CI jobs
+  and source entirely; `demo.tarik-lab.dev` no longer resolves to anything live. Security review
+  found no regressions from the old box (firewall, SSH, secret perms, socket-proxy isolation, admin
+  UI gating all matched). Old VPS (167.233.138.193) deleted once cutover was confirmed.

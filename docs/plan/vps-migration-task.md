@@ -1,6 +1,7 @@
 # VPS Migration — CX22 cost-optimised replacement  [Standalone — outside CP1–CP8]
 
-**Status:** ready to execute once the new server exists.
+**Status:** complete as of 2026-07-01. New VPS `167.233.232.229` is live, old VPS deleted. See
+CLAUDE.md session log for the full summary.
 
 **Goal:** move the live stack (`infrastructure/`, `projects/ingest`, `projects/webapp`) from the
 current Hetzner **regular-performance** VPS (`167.233.138.193`, 2 vCPU / 3.7 GB RAM / 75 GB disk,
